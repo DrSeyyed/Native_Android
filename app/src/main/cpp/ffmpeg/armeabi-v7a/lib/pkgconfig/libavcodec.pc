@@ -1,0 +1,14 @@
+prefix=/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/ffmpeg
+exec_prefix=${prefix}
+libdir=/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/ffmpeg/lib
+includedir=/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/ffmpeg/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 60.3.100
+Requires: 
+Requires.private: libswresample >= 4.10.100, libavutil >= 58.2.100
+Conflicts:
+Libs: -L${libdir}  -lavcodec 
+Libs.private: -landroid -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/libvpx/lib -lvpx -lm -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/libvpx/lib -lvpx -lm -landroid -landroid -landroid -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/libvpx/lib -lvpx -lm -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/libvpx/lib -lvpx -lm -landroid -pthread -lm -latomic -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/dav1d/lib -ldav1d -pthread -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/libaom/lib -laom -lm -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/opus/lib -lopus -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/x264/lib -lx264 -lm -ldl -L/mnt/c/ffmpeg/ffmpeg-kit3/prebuilt/android-arm/x265/lib -lx265
+Cflags: -I${includedir}
