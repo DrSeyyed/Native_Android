@@ -8,7 +8,7 @@ RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get install -y \
         build-essential git neovim wget unzip sudo \
         libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386 \
-        libxrender1 libxtst6 libxi6 libfreetype6 libxft2 xz-utils vim \
+        libxrender1 libxtst6 libxi6 libfreetype6 libxft2 xz-utils vim pulseaudio alsa-utils libasound2\
         qemu qemu-kvm libvirt-daemon-system bridge-utils libnotify4 libglu1 libqt5widgets5 openjdk-17-jdk xvfb \
         && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -24,23 +24,23 @@ RUN echo "${USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-$USER
 RUN usermod -aG sudo $USER
 RUN usermod -aG plugdev $USER
 
-RUN echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="04e8", ATTR{idProduct}=="6860", MODE="0660", GROUP="plugdev", SYMLINK+="android%n"' > /etc/udev/rules.d/51-android.rules 
+RUN echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="04e8", ATTR{idProduct}=="6860", MODE="0660", GROUP="plugdev", SYMLINK+="android%n"' > /etc/udev/rules.d/51-android.rules
 
 USER $USER
 
 WORKDIR /home/$USER
 
 # Install Flutter
-ARG FLUTTER_URL=https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.6-stable.tar.xz
-ARG FLUTTER_VERSION=3.13.6
+ARG FLUTTER_URL=https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz
+ARG FLUTTER_VERSION=3.29.0
 
 RUN wget "$FLUTTER_URL" -O flutter.tar.xz
 RUN tar -xvf flutter.tar.xz
 RUN rm flutter.tar.xz
 
 # Android Studio
-ARG ANDROID_STUDIO_URL=https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2023.1.1.20/android-studio-2023.1.1.20-linux.tar.gz
-ARG ANDROID_STUDIO_VERSION=2023.1.1.20
+ARG ANDROID_STUDIO_URL=https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2024.2.2.14/android-studio-2024.2.2.14-linux.tar.gz
+ARG ANDROID_STUDIO_VERSION=2024.2.2.14
 
 RUN wget "$ANDROID_STUDIO_URL" -O android-studio.tar.gz
 RUN tar xzvf android-studio.tar.gz
@@ -50,7 +50,7 @@ ENV ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
 
 ARG NDK_VER=27.0.11718014
 ENV ANDROID_SDK_ROOT /home/$USER/Sdk
-ENV JAVA_HOME=/home/android/android-studio/jbr  
+ENV JAVA_HOME=/home/android/android-studio/jbr
 ENV ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/$NDK_VER
 
 
@@ -63,7 +63,7 @@ RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
     && rm commandlinetools.zip
 
 RUN yes | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses || true \
-    && sdkmanager --channel=2 "emulator" "sources;android-35" "system-images;android-35;google_apis;x86_64" "platform-tools" "platforms;android-35" "build-tools;35.0.1" "ndk;$NDK_VER"    
+    && sdkmanager --channel=2 "emulator" "sources;android-35" "system-images;android-35;google_apis;x86_64" "platform-tools" "platforms;android-35" "build-tools;35.0.1" "ndk;$NDK_VER"
 
 
 # Clone your Android project into the container
