@@ -73,9 +73,10 @@ RUN sdkmanager --channel=2 "build-tools;35.0.1"
 RUN sdkmanager --channel=2 "ndk;$NDK_VER"
 RUN sdkmanager --channel=2 "cmake;3.22.1"
 
+
 RUN STUDIO_CONFIG_DIR="AndroidStudio$(echo ${ANDROID_STUDIO_VERSION} | cut -d. -f1,2)" \
-    && mkdir -p /root/.config/Google/${STUDIO_CONFIG_DIR}/ \
-    && cat >> /root/.config/Google/${STUDIO_CONFIG_DIR}/idea.properties << 'EOF'
+    && sudo mkdir -p /root/.config/Google/${STUDIO_CONFIG_DIR}/ \
+    && sudo cat >> /root/.config/Google/${STUDIO_CONFIG_DIR}/idea.properties << 'EOF'
 disable.android.first.run=true
 android.studio.sdk.setup.wizard.completed=true
 idea.auto.update.disabled=true
