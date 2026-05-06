@@ -16,4 +16,4 @@ fi
 if [ "$HOST_DISPLAY" != "" ]; then
 AOSP_ARGS="${AOSP_ARGS} --env=DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
 fi
-docker run -i $AOSP_ARGS --device /dev/kvm --privileged --group-add plugdev drseyyed/studio:latest $@
+docker run -it --name android-studio-native $AOSP_ARGS --device /dev/kvm --privileged --group-add plugdev drseyyed/studio:latest $@
