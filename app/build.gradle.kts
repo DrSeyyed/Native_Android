@@ -5,6 +5,8 @@ plugins {
 android {
     namespace = "com.example.footipredict"
     compileSdk = 34
+    ndkVersion = "27.0.11718014"
+    buildToolsVersion = "35.0.1"
 
     defaultConfig {
         applicationId = "com.example.footipredict"

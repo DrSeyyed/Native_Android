@@ -31,7 +31,7 @@ USER $USER
 WORKDIR /home/$USER
 
 # Install Flutter
-ARG FLUTTER_URL=https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz
+ARG FLUTTER_URL=https://storage.flutter-io.cn/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz
 ARG FLUTTER_VERSION=3.29.0
 
 RUN wget "$FLUTTER_URL" -O flutter.tar.xz
@@ -62,9 +62,28 @@ RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
     && mv ${ANDROID_SDK_ROOT}/cmdline-tools/cmdline-tools ${ANDROID_SDK_ROOT}/cmdline-tools/latest \
     && rm commandlinetools.zip
 
-RUN yes | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses || true \
-    && sdkmanager --channel=2 "emulator" "sources;android-35" "system-images;android-35;google_apis;x86_64" "platform-tools" "platforms;android-35" "build-tools;35.0.1" "ndk;$NDK_VER"
+RUN yes | sdkmanager --sdk_root=${ANDROID_SDK_ROOT} --licenses || true
 
+RUN sdkmanager --channel=2 "emulator" 
+RUN sdkmanager --channel=2 "sources;android-35" 
+RUN sdkmanager --channel=2 "system-images;android-35;google_apis;x86_64"
+RUN sdkmanager --channel=2 "platform-tools" 
+RUN sdkmanager --channel=2 "platforms;android-35" 
+RUN sdkmanager --channel=2 "build-tools;35.0.1" 
+RUN sdkmanager --channel=2 "ndk;$NDK_VER"
+RUN sdkmanager --channel=2 "cmake;3.22.1"
+
+RUN STUDIO_CONFIG_DIR="AndroidStudio$(echo ${ANDROID_STUDIO_VERSION} | cut -d. -f1,2)" \
+    && mkdir -p /root/.config/Google/${STUDIO_CONFIG_DIR}/ \
+    && cat >> /root/.config/Google/${STUDIO_CONFIG_DIR}/idea.properties << 'EOF'
+disable.android.first.run=true
+android.studio.sdk.setup.wizard.completed=true
+idea.auto.update.disabled=true
+EOF
+
+# Suppress repositories.cfg warning
+RUN mkdir -p /root/.android \
+    && touch /root/.android/repositories.cfg
 
 # Clone your Android project into the container
 RUN sudo git clone https://github.com/DrSeyyed/Native_Android.git /home/$USER/Project
