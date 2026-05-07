@@ -75,7 +75,7 @@ RUN sdkmanager --channel=2 "cmake;3.22.1"
 
 
 # Clone your Android project into the container
-RUN sudo git clone https://github.com/DrSeyyed/Native_Android.git /home/$USER/Project
+RUN sudo git clone --branch main --depth 1 https://github.com/DrSeyyed/Native_Android.git /home/$USER/Project
 RUN sudo chown -R $USER:$USER /home/$USER/Project
 
 RUN sudo touch /usr/local/bin/docker_entrypoint.sh
