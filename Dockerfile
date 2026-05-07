@@ -74,18 +74,6 @@ RUN sdkmanager --channel=2 "ndk;$NDK_VER"
 RUN sdkmanager --channel=2 "cmake;3.22.1"
 
 
-RUN STUDIO_CONFIG_DIR="AndroidStudio$(echo ${ANDROID_STUDIO_VERSION} | cut -d. -f1,2)" \
-    && sudo mkdir -p /root/.config/Google/${STUDIO_CONFIG_DIR}/ \
-    && cat << 'EOF' | sudo tee -a /root/.config/Google/${STUDIO_CONFIG_DIR}/idea.properties > /dev/null
-disable.android.first.run=true
-android.studio.sdk.setup.wizard.completed=true
-idea.auto.update.disabled=true
-EOF
-
-# Suppress repositories.cfg warning
-RUN sudo mkdir -p /root/.android \
-    && sudo touch /root/.android/repositories.cfg
-
 # Clone your Android project into the container
 RUN sudo git clone https://github.com/DrSeyyed/Native_Android.git /home/$USER/Project
 RUN sudo chown -R $USER:$USER /home/$USER/Project
